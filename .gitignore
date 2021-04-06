@@ -1,0 +1,10 @@
+*.*~
+*.pyc
+*.swp
+.DS_Store
+.vscode
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+nupkg/
+project.lock.json
