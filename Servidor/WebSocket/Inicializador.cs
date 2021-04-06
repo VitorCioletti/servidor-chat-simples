@@ -8,7 +8,7 @@ namespace Servidor.WebSocket
         public void Inicializa(string[] args)
         {
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Configuracao>())
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Configurador>())
                 .Build()
                 .Run();
         }

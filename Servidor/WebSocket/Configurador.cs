@@ -4,9 +4,9 @@ namespace Servidor.WebSocket
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
 
-    public class Configuracao
+    public class Configurador
     {
-        public Configuracao(IConfiguration configuration) => Configuration = configuration;
+        public Configurador(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
