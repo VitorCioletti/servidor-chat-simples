@@ -1,19 +1,14 @@
 namespace Servidor
 {
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Hosting;
+    using WebSocket;
 
-    public class Program
+    public class Aplicacao
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var inicializadorWebSocket = new Inicializador();
+            inicializadorWebSocket.Inicializa(args);
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
-        }
     }
 }
