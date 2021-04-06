@@ -1,4 +1,4 @@
-namespace Servidor.Entidades
+namespace Servidor.Regras.Entidades
 {
     using System;
     using System.Collections.Generic;
