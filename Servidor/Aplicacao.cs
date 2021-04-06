@@ -9,6 +9,5 @@ namespace Servidor
             var inicializadorWebSocket = new Inicializador();
             inicializadorWebSocket.Inicializa(args);
         }
-
     }
 }
