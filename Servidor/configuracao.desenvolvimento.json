@@ -1,9 +1,30 @@
 {
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
+    "WebSocket":
+    {
+        "Endereco": "127.0.0.1",
+        "Porta": 5000
+    },
+    "Redis":
+    {
+        "Endereco": "127.0.0.1",
+        "Porta": 6379
+    },
+    "Serilog": {
+        "Using":  [ "Serilog.Sinks.Console" ],
+        "MinimumLevel": "Debug",
+        "WriteTo": [
+            {
+                "Name": "File",
+                "Args": {
+                    "OutputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} - {Level:u} - {Message:lj}{NewLine}"
+                }
+            },
+            {
+                "Name": "Console",
+                "Args": {
+                    "OutputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} - {Level:u} - {Message:lj}{NewLine}"
+                }
+            }
+        ]
     }
-  }
 }
