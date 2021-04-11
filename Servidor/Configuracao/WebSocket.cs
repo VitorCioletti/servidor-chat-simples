@@ -1,19 +1,29 @@
 
 namespace Servidor.Configuracao.WebSocket
 {
-    using System;
-    using System.Net.WebSockets;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Hosting;
+    using Protocolo.Entidades.Requisicao;
+    using Protocolo.Entidades;
+    using Protocolo;
+    using Regras;
+    using System.Collections.Generic;
+    using System.Net.WebSockets;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Threading;
+    using System;
 
     public static class WebSocket 
     {
+        public static Dictionary<string, System.Net.WebSockets.WebSocket> _conexoes;
+
         public static void Inicializa(string[] args)
         {
+            _conexoes = new Dictionary<string, System.Net.WebSockets.WebSocket>();
+
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(w => w.Configure(_configura))
                 .Build()
@@ -34,7 +44,7 @@ namespace Servidor.Configuracao.WebSocket
                 {
                     var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                    await EnviaEco(context, webSocket);
+                    await _recebeRequisicao(context, webSocket);
                 }
                 else
                     context.Response.StatusCode = 400;
@@ -43,24 +53,57 @@ namespace Servidor.Configuracao.WebSocket
                 await next();
         }
 
-        private static async Task EnviaEco(HttpContext context, System.Net.WebSockets.WebSocket webSocket)
+        private static async Task _recebeRequisicao(HttpContext context, System.Net.WebSockets.WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
-            WebSocketReceiveResult result = 
-                await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            var respostaSocket = await _aguardaResposta(webSocket, buffer);
 
-            while (!result.CloseStatus.HasValue)
+            while (!respostaSocket.CloseStatus.HasValue)
             {
-                await webSocket.SendAsync(
-                    new ArraySegment<byte>(buffer, 0, result.Count), 
-                    result.MessageType, 
-                    result.EndOfMessage, 
-                    CancellationToken.None
-                );
+                var jsonRequisicao = Encoding.Default.GetString(buffer, 0, respostaSocket.Count);
+                var requisicao = Parser.Deserializa(jsonRequisicao);
 
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                var resposta = await Regras.Processa(requisicao);
+
+                if (resposta.Sucesso && requisicao.Contexto == Contexto.Usuario)
+                {
+                    if (requisicao.Acao == Acao.Entra)
+                        _conexoes.Add(resposta.Corpo.Conexao, webSocket);
+
+                    else if (requisicao.Acao == Acao.Sai)
+                        _conexoes.Remove(resposta.Corpo.Conexao);
+                }
+
+                var jsonResposta = Parser.Serializa(resposta);
+
+                await _enviaMensagem(webSocket, jsonResposta);
+
+                respostaSocket = await _aguardaResposta(webSocket, buffer);
             }
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+
+            await webSocket.CloseAsync(
+                respostaSocket.CloseStatus.Value, respostaSocket.CloseStatusDescription, CancellationToken.None);
+        }
+
+        public static async Task EnviaMensagem(string idConexao, Mensagem mensagem)
+        {
+            var conexao = _conexoes[idConexao];
+
+            var jsonMensagem = Parser.Serializa<Mensagem>(mensagem);
+            await _enviaMensagem(conexao, jsonMensagem);
+        }
+
+        private static async Task _enviaMensagem(System.Net.WebSockets.WebSocket conexao, string mensagem)
+        {
+            var arraySegment = new ArraySegment<byte>(Encoding.Default.GetBytes(mensagem));
+
+            await conexao.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        private static async Task<WebSocketReceiveResult> _aguardaResposta(
+            System.Net.WebSockets.WebSocket webSocket, byte[] buffer)
+        {
+            return await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
         }
     }
 }
