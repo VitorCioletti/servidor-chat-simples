@@ -3,6 +3,7 @@ namespace Servidor.Redis
     using EstruturasDado.Tipos;
     using ServiceStack.Redis;
     using System;
+    using static Configuracao.ArquivoConfiguracao;
     using static Configuracao.Log;
 
     public class Redis : IDisposable
@@ -19,8 +20,8 @@ namespace Servidor.Redis
 
         public Redis()
         {
-            var endereco = "localhost";
-            var porta = 6379;
+            var endereco = Configuracoes.GetSection("Redis:Endereco").Value;
+            var porta = int.Parse(Configuracoes.GetSection("Redis:Porta").Value);
 
             Loga.Information("Inicializando conexão com Redis.");
 
