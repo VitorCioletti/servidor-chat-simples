@@ -1,7 +1,6 @@
 namespace Servidor.Configuracao
 {
     using Serilog;
-    using System;
     using static Configuracao.ArquivoConfiguracao;
 
     public static class Log

@@ -16,7 +16,7 @@
             {
                 "Name": "File",
                 "Args": {
-                    "Path": "logs/log-{Date}.log",
+                    "Path": "logs/.log",
                     "RollingInterval": "Day",
                     "RetainedFileCountLimit": 30,
                     "OutputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} - {Level:u} - {Message:lj}{NewLine}"

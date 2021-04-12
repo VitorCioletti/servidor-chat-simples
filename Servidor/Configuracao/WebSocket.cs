@@ -1,5 +1,5 @@
 
-namespace Servidor.Configuracao.WebSocket
+namespace Servidor.Configuracao
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

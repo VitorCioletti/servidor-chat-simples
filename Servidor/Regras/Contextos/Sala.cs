@@ -1,6 +1,6 @@
 namespace Servidor.Regras.Contextos
 {
-    using Configuracao.WebSocket;
+    using Configuracao;
     using Protocolo.Entidades;
     using Excecoes.Contextos.Sala;
     using Excecoes.Contextos.Usuario;

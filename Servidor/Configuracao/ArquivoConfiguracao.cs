@@ -1,7 +1,6 @@
 namespace Servidor.Configuracao
 {
     using System.IO;
-
     using Microsoft.Extensions.Configuration;
 
     public static class ArquivoConfiguracao
