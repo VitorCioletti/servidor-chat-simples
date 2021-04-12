@@ -6,6 +6,7 @@ namespace Servidor.Regras.Contextos
     using Redis;
     using System.Threading.Tasks;
     using System;
+    using static Configuracao.Log;
 
     public static class Usuario
     {
@@ -25,7 +26,10 @@ namespace Servidor.Regras.Contextos
                     case Acao.Adiciona:
 
                         if (!usuariosCadastrados.Existe(apelidoUsuario))
+                        {
                             usuariosCadastrados.Adiciona(apelidoUsuario);
+                            Loga.Information($"Criado usuário \"{apelidoUsuario}\".");
+                        }
                         else 
                             throw new UsuarioJaExisteException(); 
 
@@ -38,6 +42,7 @@ namespace Servidor.Regras.Contextos
                             resposta.Corpo.Conexao = idConexao; 
 
                             usuariosOnline.Adiciona(apelidoUsuario, idConexao);
+                            Loga.Information($"Usuário \"{apelidoUsuario}\" ficou online.");
                         }
                         else
                             throw new UsuarioJaOnlineException();
@@ -49,6 +54,8 @@ namespace Servidor.Regras.Contextos
                         {
                             usuariosCadastrados.Remove(apelidoUsuario);
                             usuariosOnline.Remove(apelidoUsuario);
+
+                            Loga.Information($"Removido usuário \"{apelidoUsuario}\".");
                         }
                         else
                             throw new UsuarioNaoEncontradoException();
@@ -57,7 +64,10 @@ namespace Servidor.Regras.Contextos
 
                     case Acao.Sai:
                         if (usuariosOnline.Existe(apelidoUsuario))
+                        {
                             usuariosOnline.Remove(apelidoUsuario);
+                            Loga.Information($"Usuário \"{apelidoUsuario}\" ficou offline.");
+                        }
                         else
                             throw new UsuarioOfflineException();
 

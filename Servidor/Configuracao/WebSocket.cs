@@ -9,12 +9,14 @@ namespace Servidor.Configuracao
     using Protocolo.Entidades;
     using Protocolo;
     using Regras;
+    using Serilog;
     using System.Collections.Generic;
     using System.Net.WebSockets;
     using System.Text;
     using System.Threading.Tasks;
     using System.Threading;
     using System;
+    using static Configuracao.Log;
 
     public static class WebSocket 
     {
@@ -24,16 +26,23 @@ namespace Servidor.Configuracao
         {
             _conexoes = new Dictionary<string, System.Net.WebSockets.WebSocket>();
 
+            Loga.Information("Inicializado servidor WebSocket.");
+
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(w => w.Configure(_configura))
+                .UseSerilog(Loga)
                 .Build()
                 .Run();
         }
 
         private static void _configura(IApplicationBuilder app) 
         {
+            Loga.Information("Configurando servidor WebSocket.");
+
             app.UseWebSockets();
             app.Use(Processa);
+
+            Loga.Information("Configurado servidor WebSocket.");
         }
 
         public static async Task Processa(HttpContext context, Func<Task> next)
@@ -61,6 +70,9 @@ namespace Servidor.Configuracao
             while (!respostaSocket.CloseStatus.HasValue)
             {
                 var jsonRequisicao = Encoding.Default.GetString(buffer, 0, respostaSocket.Count);
+
+                Loga.Debug($"Recebida requisição \"{jsonRequisicao}\".");
+
                 var requisicao = Parser.Deserializa(jsonRequisicao);
 
                 var resposta = await Regras.Processa(requisicao);
@@ -79,6 +91,7 @@ namespace Servidor.Configuracao
                 await _enviaMensagem(webSocket, jsonResposta);
 
                 respostaSocket = await _aguardaResposta(webSocket, buffer);
+
             }
 
             await webSocket.CloseAsync(
@@ -98,11 +111,14 @@ namespace Servidor.Configuracao
             var arraySegment = new ArraySegment<byte>(Encoding.Default.GetBytes(mensagem));
 
             await conexao.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+
+            Loga.Debug($"Enviada mensagem \"{mensagem}\".");
         }
 
         private static async Task<WebSocketReceiveResult> _aguardaResposta(
             System.Net.WebSockets.WebSocket webSocket, byte[] buffer)
         {
+            Loga.Debug($"Aguardando resposta do cliente.");
             return await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
         }
     }

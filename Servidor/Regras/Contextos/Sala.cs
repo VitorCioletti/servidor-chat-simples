@@ -1,13 +1,14 @@
 namespace Servidor.Regras.Contextos
 {
     using Configuracao;
-    using Protocolo.Entidades;
     using Excecoes.Contextos.Sala;
     using Excecoes.Contextos.Usuario;
     using Protocolo.Entidades.Requisicao;
     using Protocolo.Entidades.Resposta;
+    using Protocolo.Entidades;
     using Redis;
     using System.Threading.Tasks;
+    using static Configuracao.Log;
 
     public static class Sala
     {
@@ -29,7 +30,10 @@ namespace Servidor.Regras.Contextos
                 {
                     case Acao.Adiciona:
                         if (!salasAtivas.Existe(idSala))
+                        {
                             salasAtivas.Adiciona(idSala);
+                            Loga.Information($"Sala \"{idSala}\" criada por \"{apelidoUsuario}\".");
+                        }
                         else
                             throw new SalaJaExisteException();
 
@@ -37,7 +41,10 @@ namespace Servidor.Regras.Contextos
 
                     case Acao.Remove:
                         if (!salasAtivas.Existe(idSala))
+                        {
                             salasAtivas.Remove(idSala);
+                            Loga.Information($"Sala \"{idSala}\" removida por \"{apelidoUsuario}\".");
+                        }
                         else
                             throw new SalaNaoExisteException();
                         
@@ -46,7 +53,10 @@ namespace Servidor.Regras.Contextos
                     case Acao.Entra:
                         if (salasAtivas.Existe(idSala))
                             if (!usuariosSala.Existe(idSala, apelidoUsuario))
+                            {
                                 usuariosSala.Adiciona(idSala, apelidoUsuario);
+                                Loga.Information($"Usuário \"{apelidoUsuario}\" entrou na sala \"{idSala}\".");
+                            }
                             else
                                 throw new UsuarioNaSalaException();
 
@@ -58,7 +68,10 @@ namespace Servidor.Regras.Contextos
                     case Acao.Sai:
                         if (salasAtivas.Existe(idSala))
                             if (usuariosSala.Existe(idSala, apelidoUsuario))
+                            {
                                 usuariosSala.Remove(idSala, apelidoUsuario);
+                                Loga.Information($"Usuário \"{apelidoUsuario}\" saiu da sala \"{idSala}\".");
+                            }
                             else
                                 throw new UsuarioNaoEstaNaSalaException();
                         else
@@ -70,18 +83,19 @@ namespace Servidor.Regras.Contextos
                         var usuarios = usuariosSala.ObtemTodos(idSala);
                         usuarios.Remove(apelidoUsuario);
 
+                        var textoMensagem = requisicao.Corpo.Texto;
+                        var mensagem = new Mensagem(apelidoUsuario, idSala, textoMensagem);
+
                         foreach (var usuario in usuarios)
                         {
-                            var textoMensagem = requisicao.Corpo.Texto;
                             var idConexao = usuariosOnline.Obtem(usuario);
 
                             if (idConexao != null)
-                            {
-                                var mensagem = new Mensagem(apelidoUsuario, idSala, textoMensagem);
-
                                 await WebSocket.EnviaMensagem(idConexao, mensagem);
-                            }
                         }
+
+                        Loga.Information(
+                            $"Usuário \"{apelidoUsuario}\" enviou mensagem \"{mensagem.Id}\" para sala \"{idSala}\".");
 
                         break; 
 

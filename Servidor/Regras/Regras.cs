@@ -4,10 +4,10 @@ namespace Servidor.Regras
     using Excecoes;
     using Protocolo.Entidades.Requisicao;
     using Protocolo.Entidades.Resposta;
-    using Protocolo;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System;
+    using static Configuracao.Log;
 
     public static class Regras
     {
@@ -20,6 +20,8 @@ namespace Servidor.Regras
                 { Contexto.Sala, async (r) => await Sala.ProcessaRequisicaoAsync(r)},
                 { Contexto.Usuario, async (r) => await Usuario.ProcessaRequisicaoAsync(r)},
             };
+
+            Loga.Debug("Configurados contextos de regras.");
         }
 
         public static async Task<Resposta> Processa(Requisicao requisicao)
@@ -39,6 +41,8 @@ namespace Servidor.Regras
                 resposta.Sucesso = false;
                 resposta.Corpo.IdErro = "erro-interno-servidor";
                 resposta.Corpo.MensagemErro = "Erro interno de servidor.";
+
+                Loga.Error($"Erro ao processar regra da requisição \"{requisicao}\".", e);
 
                 return resposta;
             }
