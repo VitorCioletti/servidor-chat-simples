@@ -75,9 +75,12 @@ namespace Servidor.Regras.Contextos
                             var textoMensagem = requisicao.Corpo.Texto;
                             var idConexao = usuariosOnline.Obtem(usuario);
 
-                            var mensagem = new Mensagem(apelidoUsuario, idSala, textoMensagem);
+                            if (idConexao != null)
+                            {
+                                var mensagem = new Mensagem(apelidoUsuario, idSala, textoMensagem);
 
-                            await WebSocket.EnviaMensagem(idConexao, mensagem);
+                                await WebSocket.EnviaMensagem(idConexao, mensagem);
+                            }
                         }
 
                         break; 
