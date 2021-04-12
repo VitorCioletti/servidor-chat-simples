@@ -10,14 +10,14 @@ namespace Servidor.Protocolo.Entidades
 
         public string ApelidoUsuario { get; set; }
 
-        public DateTime DataHoraEnvio { get; set; }
+        public long DataHoraEnvio { get; set; }
 
         public string Texto { get; set; }
 
         public Mensagem(string apelidoUsuario, string idSala, string texto)
         {
             Id = Guid.NewGuid().ToString();
-            DataHoraEnvio = DateTime.UtcNow;
+            DataHoraEnvio = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
 
             IdSala = idSala;
 
