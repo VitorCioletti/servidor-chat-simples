@@ -4,7 +4,6 @@
 
 ### Como rodar
 O tutorial foi realizado num "Ubuntu 20.04";
-
 ```
 // instalar Redis, node e NPM
 sudo apt install redis-tools redis-server node npm
@@ -36,8 +35,8 @@ OBS: Abrir dois terminais para realizar o teste:
 - Estabelecer conexão: ``` wscat -c <ENDERECO>:<PORTA> ```
 - Criar usuário: ```{ "Contexto": "Usuario", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
 - Logar com usuário: ```{ "Contexto": "Usuario", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
-- Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-um", "IdSala": "nova-sala"} }```
-- Enviar mensagem para sala: ```{ "Contexto": "Sala", "Acao": "EnviaMensagem", "Corpo": { "ApelidoUsuario": "usuario-um", "IdSala": "nova-sala", "Texto": "Mensagem para sala."} }```
+- Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "IdSala": "nova-sala"} }```
+- Enviar mensagem para sala: ```{ "Contexto": "Sala", "Acao": "EnviaMensagem", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "IdSala": "nova-sala", "Texto": "Mensagem para sala."} }```
 
 
 
