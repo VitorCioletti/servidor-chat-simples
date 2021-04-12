@@ -2,15 +2,15 @@
 
 Servidor feliz e simples de chat.  :)
 
-* [Protocolo]()
-    * [Estrutura]()
-    * [Problemas e possíveis melhorias]()
+* Protocolo
+    * [Estrutura](Documentacao/Protocolo/estrutura.md)
 
-* [Proejto]()
-    * [Estrutura]()
-    * [Como rodar e testar]()
-    * [Problemas e possíveis melhorias]()
+* Projeto
+    * [Como rodar e testar](Documentacao/Projeto/como-rodar-e-testar.md)
+    * [Estrutura](Documentacao/Projeto/estrutura.md)
+    * [Padrão de código](Documentacao/Projeto/padrao-de-codigo.md)
+    * [Problemas e possíveis melhorias](Documentacao/Projeto/problemas-e-possiveis-melhorias.md)
 
-* [Redis]()
-    * [Estrutura]()
-    * [Justificativa de uso]()
+* Redis
+    * [Estrutura](Documentacao/Redis/estrutura.md)
+    * [Justificativa de uso](Documentacao/Redis/justificativa-de-uso.md)
