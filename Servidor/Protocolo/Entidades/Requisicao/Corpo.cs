@@ -4,6 +4,8 @@ namespace Servidor.Protocolo.Entidades.Requisicao
     {
         public string Texto { get; private set; }
 
+        public string ApelidoUsuarioDestinatario { get; private set; }
+
         public string ApelidoUsuario { get; private set; }
 
         public string IdSala { get; private set; }

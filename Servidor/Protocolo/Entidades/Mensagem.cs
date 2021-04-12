@@ -6,6 +6,8 @@ namespace Servidor.Protocolo.Entidades
     {
         public string Id { get; set; }
 
+        public string ApelidoUsuarioDestinatario { get; set; }
+
         public string IdSala { get; set; }
 
         public string ApelidoUsuario { get; set; }

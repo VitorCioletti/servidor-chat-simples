@@ -1,9 +1,11 @@
 namespace Servidor.Regras.Contextos
 {
+    using Configuracao;
     using Excecoes.Contextos.Usuario;
     using Protocolo.Entidades.Requisicao;
     using Protocolo.Entidades.Resposta;
     using Redis;
+    using Servidor.Protocolo.Entidades;
     using System.Threading.Tasks;
     using System;
     using static Configuracao.Log;
@@ -67,6 +69,21 @@ namespace Servidor.Regras.Contextos
                         {
                             usuariosOnline.Remove(apelidoUsuario);
                             Loga.Information($"Usuário \"{apelidoUsuario}\" ficou offline.");
+                        }
+                        else
+                            throw new UsuarioOfflineException();
+
+                        break;
+
+                    case Acao.EnviaMensagem:
+                        var destinatario = requisicao.Corpo.ApelidoUsuarioDestinatario;
+
+                        if (usuariosOnline.Existe(apelidoUsuario) && usuariosOnline.Existe(destinatario))
+                        {
+                            var idConexao = usuariosOnline.Obtem(destinatario);
+                            var novaMensagem = new Mensagem(destinatario, null, requisicao.Corpo.Texto);
+
+                            await WebSocket.EnviaMensagem(idConexao, novaMensagem);
                         }
                         else
                             throw new UsuarioOfflineException();

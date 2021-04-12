@@ -24,21 +24,43 @@ Não foi desenvolvimento nenhum cliente para conversar com o servidor, é necess
 
 OBS: Abrir dois terminais para realizar o teste:
 
-#### Criação do `usuario-um-teste`
+#### Envio de mensagem para uma sala
+
+**Criação do `usuario-um-teste`**
+
 - Estabelecer conexão: ``` wscat -c <ENDERECO>:<PORTA> ```
 - Criar usuário: ```{ "Contexto": "Usuario", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-um-teste" } }```
 - Logar com usuário: ```{ "Contexto": "Usuario", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-um-teste" } }```
 - Criar sala: ```{ "Contexto": "Sala", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-um-teste", "IdSala": "nova-sala"} }```
 - Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-um-teste", "IdSala": "nova-sala"} }```
 
-#### Criação do `usuario-dois-teste`
+**Criação do `usuario-dois-teste`**
+
 - Estabelecer conexão: ``` wscat -c <ENDERECO>:<PORTA> ```
 - Criar usuário: ```{ "Contexto": "Usuario", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
 - Logar com usuário: ```{ "Contexto": "Usuario", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
 - Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "IdSala": "nova-sala"} }```
+
+**Envio da mensagem para a sala**
 - Enviar mensagem para sala: ```{ "Contexto": "Sala", "Acao": "EnviaMensagem", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "IdSala": "nova-sala", "Texto": "Mensagem para sala."} }```
 
+#### Envio de mensagem para um usuário 
 
+**Criação do `usuario-um-teste`**
 
+- Estabelecer conexão: ``` wscat -c <ENDERECO>:<PORTA> ```
+- Criar usuário: ```{ "Contexto": "Usuario", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-um-teste" } }```
+- Logar com usuário: ```{ "Contexto": "Usuario", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-um-teste" } }```
+- Criar sala: ```{ "Contexto": "Sala", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-um-teste", "IdSala": "nova-sala"} }```
+- Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-um-teste", "IdSala": "nova-sala"} }```
 
+**Criação do `usuario-dois-teste`**
 
+- Estabelecer conexão: ``` wscat -c <ENDERECO>:<PORTA> ```
+- Criar usuário: ```{ "Contexto": "Usuario", "Acao": "Adiciona", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
+- Logar com usuário: ```{ "Contexto": "Usuario", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste" } }```
+- Entrar na sala: ```{ "Contexto": "Sala", "Acao": "Entra", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "IdSala": "nova-sala"} }```
+
+**Envio da mensagem**
+
+- Enviar mensagem para usuário: ```{ "Contexto": "Usuario", "Acao": "EnviaMensagem", "Corpo": { "ApelidoUsuario": "usuario-dois-teste", "ApelidoUsuarioDestinatario": "usuario-um-teste", "Texto": "Mensagem para usuário um de teste."} }```
