@@ -6,6 +6,7 @@
 * [Acoplamento de Regras com WebSocket](#acoplamento-de-Regras-com-Redis)
 * [Falta de verificação de formato dos campos do protocolo](#falta-de-verificação-de-formato-dos-campos-do-protocolo)
 * [Falta de reuso nas classes de regras Contexto](#falta-de-reuso-nas-classes-de-regras-Contexto)
+* [Falta de finalização graciosa](#falta-de-finalização-graciosa)
 * [Mensagens fire and forget](#mensagens-fire-and-forget)
 * [Obrigatoriedade de configuração de ambiente de desenvolvimento](#obrigatoriedade-de-configuração-de-ambiente-de-desenvolvimento)
 * [Protocolo obriga que as ações sirvam para todos os contextos](#protocolo-obriga-que-as-ações-sirvam-para-todos-os-contextos)
@@ -22,6 +23,10 @@ A regra de negócio está diretamente acoplada com `Websocket` dificultando reus
 ### Falta de verificação de formato dos campos do protocolo
 
 Não é feita nenhuma verificação de formato dos campos do protocolo. Uma forma de resolver esse problema é o parser aplicar um `json schema` ao `Deserializar` e `Serializar` os objetos.
+
+### Falta de finalização graciosa
+
+Não foi desenvolvido nenhum mecanismo de finalização graciosa, isso faz com que mensagens possam ser perdidas no meio do processamento.
 
 ### Falta de reuso nas classes de regras Contexto
 
