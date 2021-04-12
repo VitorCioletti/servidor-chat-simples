@@ -1,3 +1,16 @@
 # Servidor simples de chat 
 
-Servidor simples de chat feito para o teste de desenvolvedor Sênior para a Take Blip.
+Servidor feliz e simples de chat.  :)
+
+* [Protocolo]()
+    * [Estrutura]()
+    * [Problemas e possíveis melhorias]()
+
+* [Proejto]()
+    * [Estrutura]()
+    * [Como rodar e testar]()
+    * [Problemas e possíveis melhorias]()
+
+* [Redis]()
+    * [Estrutura]()
+    * [Justificativa de uso]()
