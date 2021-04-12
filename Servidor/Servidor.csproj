@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Versao>v0.1.0</Versao>
   </PropertyGroup>
 
   <ItemGroup>
